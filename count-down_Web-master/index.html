@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CountDown</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/configClock/timeRemain.css" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <!-- <div class="background-website"></div> -->
+        <div class="contain-tree-flower">
+            <img class="tree-flower" src="imgs/hoa-dao2.png" />
+            <img class="lentern" src="imgs/long-den2.png" />
+            <img class="lentern" src="imgs/long-den3.png" />
+            <img class="lentern" src="imgs/long-den4.png" />
+        </div>
+        <div class="contain-tree-flower">
+            <img class="tree-flower" src="imgs/hoa-mai.png" />
+            <img class="lentern" src="imgs/long-den2.png" />
+            <img class="lentern" src="imgs/long-den3.png" />
+            <img class="lentern" src="imgs/long-den4.png" />
+        </div>
+        <div class="sky"></div>
+        <img class="family" src="imgs/family.png" />
+        <img class="family" src="imgs/family-goi-banh.png" />
+        <img class="textTet" src="imgs/tet.png" />
+        <img class="number" src="imgs/2_1.png" />
+        <img class="number" src="imgs/0_1.png" />
+        <img class="number" src="imgs/2_2.png" />
+        <img class="number" src="imgs/0_2.png" />
+        <img class="slogan" src="imgs/slogan.png" />
+        <div class="clock">
+            <div class="viewTime">
+                <div id="dateRemain" class="time-remain">
+                    <p>Ngày</p>
+                    <div id="dateRemain_1" class="element-time"> </div>
+                    <div id="dateRemain_2" class="element-time"> </div>
+                </div>
+                <div id="hoursRemain" class="time-remain">
+                    <p>Giờ</p>
+                    <div id="hoursRemain_1" class="element-time"> </div>
+                    <div id="hoursRemain_2" class="element-time"> </div>
+                </div>
+                <div class="hai-cham">
+                    <p>:</p>
+                </div>
+                <div id="minutesRemain" class="time-remain">
+                    <p>Phút</p>
+                    <div id="minutesRemain_1" class="element-time"> </div>
+                    <div id="minutesRemain_2" class="element-time"> </div>
+                </div>
+                <div class="hai-cham">
+                    <p>:</p>
+                </div>
+                <div id="secondsRemain" class="time-remain">
+                    <p>Giây</p>
+                    <div id="secondsRemain_1" class="element-time"> </div>
+                    <div id="secondsRemain_2" class="element-time"> </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="setting">
+            <img class="icon-setting" src="imgs/settings.png" />
+            <audio src="mp3/ConBuomXuan-HoQuangHieu-2577880.mp3" controls="controls"></audio>
+        </div> -->
+        <audio id="bg-music" loop>
+            <source src="mp3/Tết Bình An.mp3" type="audio/mp3">
+        </audio>
+
+        <div id="start-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; display: none;">
+            <h1 style="font-family: 'Arial', sans-serif; font-size: 35px; margin-bottom: 20px; color: #ffe100; text-align: center;">Đếm ngược Tết 2026</h1>
+            <button id="start-btn" style="padding: 15px 35px; font-size: 22px; font-weight: bold; background: #c72544; color: #ffe100; border: 2px solid #ffe100; border-radius: 10px; cursor: pointer; box-shadow: 0 0 15px rgba(255,225,0,0.5); transition: 0.3s;">
+                Nhấn để Bật nhạc & Bắt đầu!
+            </button>
+        </div>
+
+        <div id="play-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; cursor: pointer; background: rgba(255,255,255,0.8); padding: 10px 15px; border-radius: 50%; font-size: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+            🔊
+        </div>
+
+    </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var music = document.getElementById("bg-music");
+            var overlay = document.getElementById("start-overlay");
+            var startBtn = document.getElementById("start-btn");
+            var playBtn = document.getElementById("play-btn");
+
+            music.volume = 0.2;
+            // Hàm thử tự động phát
+            function tryAutoplay() {
+                var playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // Trình duyệt CHO PHÉP tự động phát -> Ẩn overlay
+                        overlay.style.display = "none";
+                        playBtn.innerHTML = "🔊";
+                    })
+                    .catch(error => {
+                        // Trình duyệt CHẶN tự động phát -> Hiện overlay bắt buộc người dùng click
+                        overlay.style.display = "flex";
+                        playBtn.innerHTML = "🔇";
+                    });
+                }
+            }
+
+            // Gọi thử tự động phát ngay khi trang load xong
+            tryAutoplay();
+
+            // Xử lý khi người dùng click vào nút trên Overlay
+            startBtn.addEventListener("click", function() {
+                music.play();
+                overlay.style.display = "none";
+                playBtn.innerHTML = "🔊";
+            });
+
+            // Xử lý nút bật/tắt nhạc ở góc màn hình
+            playBtn.onclick = function() {
+                if(music.paused) { 
+                    music.play(); 
+                    this.innerHTML = "🔊"; 
+                } else { 
+                    music.pause(); 
+                    this.innerHTML = "🔇"; 
+                }
+            };
+        });
+    </script>
+    <script src="js/displayAll.js"></script>
+    <script src="js/objectFly/configFly.js"></script>
+    <script src="js/configClock/remainTime.js"></script>
+    <script src="js/configClock/countDown.js"></script>
+    <script src="js/configClock/viewRemainTime.js"></script>
+    <script src="js/configClock/displayClock.js"></script>
+    <script src="js/objectFly/flowerFly.js"></script>
+    <script src="js/objectFly/lenternFly.js"></script>
+</html>
